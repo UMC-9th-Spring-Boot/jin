@@ -12,6 +12,9 @@ import org.hibernate.annotations.ColumnDefault;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"member_id", "mission_id"})
+}) // 한 유저는 한 미션에 한번만 도전 가능
 public class MissionByMember extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
