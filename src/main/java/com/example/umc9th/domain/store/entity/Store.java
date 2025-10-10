@@ -46,7 +46,7 @@ public class Store extends BaseEntity {
     private Double longitude; // 경도
 
     // 연관관계 매핑
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreImage> storeImgList = new ArrayList<>();
 
 }

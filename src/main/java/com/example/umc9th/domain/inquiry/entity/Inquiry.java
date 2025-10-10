@@ -36,6 +36,6 @@ public class Inquiry extends BaseEntity {
     private Boolean isAnswered = false;
 
     // 연관관계 매핑
-    @OneToMany(mappedBy = "inquiry", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "inquiry", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InquiryImage> inquiryImgList = new ArrayList<>();
 }

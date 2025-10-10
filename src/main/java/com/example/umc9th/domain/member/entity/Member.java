@@ -56,30 +56,30 @@ public class Member extends BaseEntity {
 
     // 연관관계 매핑
     // 1. 약관 동의 (MemberAgree)
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberAgree> memberAgreeList = new ArrayList<>();
 
     // 2. 포인트 내역 (PointLog)
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PointLog> pointLogList = new ArrayList<>();
 
     // 3. 알림 (Notification)
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notificationList = new ArrayList<>();
 
     // 4. 선호 음식 카테고리 (MemberPreferCategory)
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberPreferCategory> memberPreferCategoryList = new ArrayList<>();
 
     // 5. 멤버별 미션 (MissionByMember)
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MissionByMember> missionByMemberList = new ArrayList<>();
 
     // 6. 리뷰 (Review)
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviewList = new ArrayList<>();
 
     // 7. 문의 (Inquiry)
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Inquiry> inquiryList = new ArrayList<>();
 }

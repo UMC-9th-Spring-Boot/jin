@@ -32,7 +32,7 @@ public class Mission extends BaseEntity {
     private Integer rewardPoint;
 
     // 연관관계 매핑
-    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MissionByMember> missionByMemberList = new ArrayList<>();
 
 }

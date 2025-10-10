@@ -31,10 +31,10 @@ public class Review extends BaseEntity {
     private String content;
 
     // 연관관계 매핑
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewImage> reviewImgList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OwnerComment> ownerCommentList = new ArrayList<>();
 
 }
