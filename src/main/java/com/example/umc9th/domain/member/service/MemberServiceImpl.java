@@ -1,11 +1,8 @@
 package com.example.umc9th.domain.member.service;
 
-import com.example.umc9th.domain.inquiry.repository.InquiryRepository;
 import com.example.umc9th.domain.member.dto.MemberResponse;
 import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.member.repository.*;
-import com.example.umc9th.domain.mission.repository.MissionByMemberRepository;
-import com.example.umc9th.domain.review.repository.ReviewRepository;
 import com.example.umc9th.global.apiPayload.code.status.ErrorStatus;
 import com.example.umc9th.global.apiPayload.exception.handler.ErrorHandler;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberAgreeRepository memberAgreeRepository;
-    private final PointLogRepository pointLogRepository;
-    private final NotificationRepository notificationRepository;
-    private final MemberPreferCategoryRepository memberPreferCategoryRepository;
-    private final MissionByMemberRepository missionByMemberRepository;
-    private final ReviewRepository reviewRepository;
-    private final InquiryRepository inquiryRepository;
 
     @Transactional
     @Override
