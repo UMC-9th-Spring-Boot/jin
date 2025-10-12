@@ -35,19 +35,9 @@ public class MemberServiceImpl implements MemberService {
         // 1. 회원 조회 (없으면 예외 발생)
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ErrorHandler(ErrorStatus.MEMBER_NOT_FOUND));
+        log.info("회원 {}의 탈퇴 처리를 시작합니다.", member.getNickname());
 
-        // 2. 연관된 자식 데이터들을 Batch Delete로 먼저 삭제
-        log.info("회원 {}의 연관 데이터 삭제를 시작합니다.", member.getNickname());
-        memberAgreeRepository.deleteAllByMember(member);
-        pointLogRepository.deleteAllByMember(member);
-        notificationRepository.deleteAllByMember(member);
-        memberPreferCategoryRepository.deleteAllByMember(member);
-        missionByMemberRepository.deleteAllByMember(member);
-        reviewRepository.deleteAllByMember(member);
-        inquiryRepository.deleteAllByMember(member);
-        log.info("회원 {}의 연관 데이터 삭제 완료.", member.getNickname());
-
-        // 3. 부모 엔티티인 Member 삭제
+        // 2. Member 삭제
         memberRepository.delete(member);
         log.info("회원 {}의 탈퇴 처리가 성공적으로 완료되었습니다.", member.getNickname());
 
