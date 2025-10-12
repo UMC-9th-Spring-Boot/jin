@@ -1,10 +1,13 @@
 package com.example.umc9th.domain.member.service;
 
 import com.example.umc9th.domain.inquiry.repository.InquiryRepository;
+import com.example.umc9th.domain.member.dto.MemberResponse;
 import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.member.repository.*;
 import com.example.umc9th.domain.mission.repository.MissionByMemberRepository;
 import com.example.umc9th.domain.review.repository.ReviewRepository;
+import com.example.umc9th.global.apiPayload.code.status.ErrorStatus;
+import com.example.umc9th.global.apiPayload.exception.handler.ErrorHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,12 +30,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public void deleteMemberAndAll(Long memberId){
+    public MemberResponse.MemberDeleteResultDTO deleteMemberAndAll(Long memberId){
 
-        log.info("회원 탈퇴를 시작합니다. memberId: {}", memberId);
         // 1. 회원 조회 (없으면 예외 발생)
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 회원을 찾을 수 없습니다: " + memberId));
+                .orElseThrow(() -> new ErrorHandler(ErrorStatus.MEMBER_NOT_FOUND));
 
         // 2. 연관된 자식 데이터들을 Batch Delete로 먼저 삭제
         log.info("회원 {}의 연관 데이터 삭제를 시작합니다.", member.getNickname());
@@ -48,5 +50,7 @@ public class MemberServiceImpl implements MemberService {
         // 3. 부모 엔티티인 Member 삭제
         memberRepository.delete(member);
         log.info("회원 {}의 탈퇴 처리가 성공적으로 완료되었습니다.", member.getNickname());
+
+        return new MemberResponse.MemberDeleteResultDTO(memberId, "회원 탈퇴가 성공적으로 처리되었습니다.");
     }
 }
