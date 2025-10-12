@@ -22,7 +22,7 @@ public interface MissionByMemberRepository extends JpaRepository<MissionByMember
 
     /**
      * 내가 진행중, 진행완료한 미션 모아보는 쿼리
-     * @param member         조회할 회원
+     * @param memberId       현재 사용자의 ID
      * @param status         조회할 미션 상태
      * @param cursorDeadline 마지막으로 조회된 미션의 마감일 (첫 페이지는 null)
      * @param cursorId       마지막으로 조회된 미션의 ID (첫 페이지는 null)
@@ -31,13 +31,13 @@ public interface MissionByMemberRepository extends JpaRepository<MissionByMember
      */
     @Query("SELECT mbm FROM MissionByMember mbm " +
             "JOIN mbm.mission m " +
-            "WHERE mbm.member = :member " +
+            "WHERE mbm.member.id = :memberId " +
             "  AND mbm.status = :status " +
             "  AND m.deadline >= CURRENT_TIMESTAMP " +
             "  AND (:cursorDeadline IS NULL OR m.deadline > :cursorDeadline OR (m.deadline = :cursorDeadline AND m.id < :cursorId)) " +
             "ORDER BY m.deadline ASC, m.id DESC")
     Slice<MissionByMember> findMyMissionsWithCompoundCursor(
-            @Param("member") Member member,
+            @Param("memberId") Long memberId,
             @Param("status") MissionStatus status,
             @Param("cursorDeadline") LocalDateTime cursorDeadline,
             @Param("cursorId") Long cursorId,
