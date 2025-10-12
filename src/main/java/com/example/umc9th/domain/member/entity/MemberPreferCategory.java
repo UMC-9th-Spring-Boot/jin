@@ -1,6 +1,6 @@
 package com.example.umc9th.domain.member.entity;
 
-import com.example.umc9th.global.common.BaseEntity;
+import com.example.umc9th.global.apiPayload.code.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;

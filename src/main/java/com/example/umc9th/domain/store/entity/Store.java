@@ -2,7 +2,7 @@ package com.example.umc9th.domain.store.entity;
 
 import com.example.umc9th.domain.member.entity.FoodCategory;
 import com.example.umc9th.domain.region.entity.Region;
-import com.example.umc9th.global.common.BaseEntity;
+import com.example.umc9th.global.apiPayload.code.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

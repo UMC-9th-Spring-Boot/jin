@@ -1,6 +1,6 @@
 package com.example.umc9th.domain.review.entity;
 
-import com.example.umc9th.global.common.BaseEntity;
+import com.example.umc9th.global.apiPayload.code.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

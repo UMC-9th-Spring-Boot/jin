@@ -2,7 +2,7 @@ package com.example.umc9th.domain.inquiry.entity;
 
 import com.example.umc9th.domain.inquiry.entity.enums.InquiryType;
 import com.example.umc9th.domain.member.entity.Member;
-import com.example.umc9th.global.common.BaseEntity;
+import com.example.umc9th.global.apiPayload.code.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
