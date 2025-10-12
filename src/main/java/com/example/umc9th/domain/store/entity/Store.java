@@ -1,6 +1,7 @@
 package com.example.umc9th.domain.store.entity;
 
 import com.example.umc9th.domain.member.entity.FoodCategory;
+import com.example.umc9th.domain.region.entity.Region;
 import com.example.umc9th.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,6 +47,10 @@ public class Store extends BaseEntity {
     private Double longitude; // 경도
 
     // 연관관계 매핑
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private Region region;
+
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreImage> storeImgList = new ArrayList<>();
 
