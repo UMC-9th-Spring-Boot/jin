@@ -6,7 +6,7 @@ import com.example.umc9th.domain.member.entity.enums.MemberStatus;
 import com.example.umc9th.domain.member.entity.enums.SocialLoginType;
 import com.example.umc9th.domain.mission.entity.MissionByMember;
 import com.example.umc9th.domain.review.entity.Review;
-import com.example.umc9th.global.common.BaseEntity;
+import com.example.umc9th.global.apiPayload.code.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

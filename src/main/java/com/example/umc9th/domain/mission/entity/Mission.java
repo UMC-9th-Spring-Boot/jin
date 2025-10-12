@@ -1,7 +1,7 @@
 package com.example.umc9th.domain.mission.entity;
 
 import com.example.umc9th.domain.store.entity.Store;
-import com.example.umc9th.global.common.BaseEntity;
+import com.example.umc9th.global.apiPayload.code.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package com.example.umc9th.global.common;
+package com.example.umc9th.global.apiPayload.code;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
