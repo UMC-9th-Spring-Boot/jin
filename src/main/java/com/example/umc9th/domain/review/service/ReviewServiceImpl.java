@@ -7,14 +7,19 @@ import com.example.umc9th.domain.review.dto.ReviewRequest;
 import com.example.umc9th.domain.review.dto.ReviewResponse;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.review.repository.ReviewRepository;
+import com.example.umc9th.domain.review.repository.ReviewRepositoryCustom;
 import com.example.umc9th.domain.store.entity.Store;
 import com.example.umc9th.domain.store.repository.StoreRepository;
 import com.example.umc9th.global.apiPayload.code.status.ErrorStatus;
 import com.example.umc9th.global.apiPayload.exception.handler.ErrorHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -25,7 +30,9 @@ public class ReviewServiceImpl implements ReviewService {
     private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
     private final ReviewRepository reviewRepository;
+    private final ReviewRepositoryCustom reviewRepositoryCustom;
 
+    // 리뷰 작성
     @Transactional
     @Override
     public ReviewResponse.ReviewResultDTO createReview(Long memberId, Long storeId, ReviewRequest.ReviewCreateDTO request){
@@ -45,7 +52,42 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.save(review);
 
         // 5. 응답 DTO로 변환하여 반환
-        return ReviewConverter.toReviewResultDTO(review);
+        return ReviewConverter.toReviewResultDTO(review, List.of());
     }
+
+    // 나의 리뷰 조회
+    @Override
+    public ReviewResponse.ReviewListDTO getMyReviews(
+            Long memberId, Long storeId, Integer rate, Long cursorId) {
+
+        // 1. Repository 호출 → DB 조회
+        Slice<Review> reviewSlice = reviewRepositoryCustom.findMyReviewsByFilter(
+                memberId, storeId, rate, cursorId);
+
+        // 2. 리뷰 ID 리스트 추출
+        List<Long> reviewIds = reviewSlice.getContent().stream()
+                .map(Review::getId)
+                .toList();
+
+        // 3. 리뷰별 이미지 Map 조회
+        Map<Long, List<String>> reviewImageMap = reviewRepositoryCustom.findReviewImages(reviewIds);
+
+        // 4. Converter로 DTO 변환
+        List<ReviewResponse.ReviewResultDTO> dtoList =
+                ReviewConverter.toReviewResultDTOList(reviewSlice.getContent(), reviewImageMap);
+
+        // 5. 마지막 커서 아이디 확인
+        Long nextCursorId = reviewSlice.hasNext()
+                ? dtoList.get(dtoList.size() - 1).getReviewId()
+                : null;
+
+        // 6. 응답 dto 반환
+        return ReviewResponse.ReviewListDTO.builder()
+                .reviewList(dtoList)
+                .hasNext(reviewSlice.hasNext())
+                .nextCursorId(nextCursorId)
+                .build();
+    }
+
 
 }
