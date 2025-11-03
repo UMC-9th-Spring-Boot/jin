@@ -11,11 +11,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-@JsonPropertyOrder({"isSuccess", "code", "message", "result"})
+@JsonPropertyOrder({"isSuccess", "code", "message", "result"}) // 키의 이름과 순서 보장
 @Schema(description = "공통 응답 포맷")
 public class ApiResponse<T> {
 
-    @JsonProperty("isSuccess")
+    @JsonProperty("isSuccess") // JSON 키를 항상 isSuccess로 유지
     @Schema(description = "성공 여부", example = "true")
     private final Boolean isSuccess;
 
@@ -25,7 +25,7 @@ public class ApiResponse<T> {
     @Schema(description = "상태 메시지", example = "성공입니다.")
     private final String message;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude(JsonInclude.Include.NON_NULL) // result가 없을 때 필드를 아예 생략
     @Schema(description = "결과 데이터")
     private T result;
 
