@@ -4,6 +4,7 @@ package com.example.umc9th.global.apiPayload.exception;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import com.example.umc9th.global.apiPayload.code.ErrorReasonDTO;
 import com.example.umc9th.global.apiPayload.code.status.ErrorStatus;
+import com.example.umc9th.global.notifier.DiscordNotifier;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,8 @@ import java.util.Optional;
 @RestControllerAdvice(annotations = {RestController.class}) // 전역 예외 처리기임을 선언하고, @RestController가 붙은 클래스들만 대상으로
 // ResponseEntityExceptionHandler: Spring MVC의 기본 예외 처리
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
+
+    private final DiscordNotifier discordNotifier;
 
     /**
      * @Validated 어노테이션으로 인한 유효성 검사 실패 시 (주로 @RequestParam, @PathVariable) 이 핸들러가 호출
@@ -73,6 +76,12 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
         // 발생한 예외의 전체 스택 트레이스(호출 경로)를 서버 로그에 출력 (디버깅 용도)
         e.printStackTrace();
+
+        // 요청 URI 추출
+        String uri = request.getDescription(false).replace("uri=", "");
+
+        // Discord 알림 전송
+        discordNotifier.sendErrorNotification(e, uri);
 
         // _INTERNAL_SERVER_ERROR (HTTP 500) 상태를 기반으로 표준 응답생성
         return handleExceptionInternalFalse(e, ErrorStatus._INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, ErrorStatus._INTERNAL_SERVER_ERROR.getHttpStatus(),request, e.getMessage());
