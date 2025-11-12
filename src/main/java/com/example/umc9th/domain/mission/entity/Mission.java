@@ -4,6 +4,8 @@ import com.example.umc9th.domain.store.entity.Store;
 import com.example.umc9th.global.apiPayload.code.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class Mission extends BaseEntity {
     private String content;
 
     @Column(nullable = false)
-    private LocalDateTime deadline;
+    private LocalDate deadline;
 
     @Column(nullable = false)
     private Integer targetAmount;

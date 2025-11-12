@@ -11,6 +11,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -21,7 +22,7 @@ public class MissionServiceImpl implements MissionService {
     private final MissionByMemberRepository missionByMemberRepository;
 
     @Override
-    public MissionResponse.MyMissionListDTO getMyMissions(Long memberId, MissionStatus status, LocalDateTime cursorDeadline, Long cursorId, int size) {
+    public MissionResponse.MyMissionListDTO getMyMissions(Long memberId, MissionStatus status, LocalDate cursorDeadline, Long cursorId, int size) {
 
         // 1. Pageable 객체 생성 (커서 기반이므로 페이지 번호는 항상 0)
         PageRequest pageRequest = PageRequest.of(0, size);

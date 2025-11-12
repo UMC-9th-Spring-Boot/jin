@@ -1,10 +1,13 @@
 package com.example.umc9th.domain.mission.converter;
 
+import com.example.umc9th.domain.mission.dto.MissionRequest;
 import com.example.umc9th.domain.mission.dto.MissionResponse;
 import com.example.umc9th.domain.mission.entity.Mission;
 import com.example.umc9th.domain.mission.entity.MissionByMember;
+import com.example.umc9th.domain.store.entity.Store;
 import org.springframework.data.domain.Slice;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +33,7 @@ public class MissionConverter {
                 .collect(Collectors.toList());
 
         // 다음 페이지 조회를 위해 커서 값들을 초기화
-        LocalDateTime nextCursorDeadline = null;
+        LocalDate nextCursorDeadline = null;
         Long nextCursorId = null;
 
         // 현재 페이지의 미션 목록이 비어있지 않다면, 다음 페이지를 조회할 커서 설정
@@ -48,6 +51,24 @@ public class MissionConverter {
                 .hasNext(missionByMemberSlice.hasNext())
                 .nextCursorDeadline(nextCursorDeadline)
                 .nextCursorId(nextCursorId)
+                .build();
+    }
+
+    // DTO -> Entity 변환
+    public static Mission toMission(MissionRequest.MissionAddDTO request, Store store) {
+        return Mission.builder()
+                .store(store)
+                .content(request.getContent())
+                .deadline(request.getDeadline())
+                .targetAmount(request.getTargetAmount())
+                .rewardPoint(request.getRewardPoint())
+                .build();
+    }
+
+    // Entity -> DTO 변환 (생성 응답)
+    public static MissionResponse.MissionAddResultDTO toMissionAddResultDTO(Mission mission) {
+        return MissionResponse.MissionAddResultDTO.builder()
+                .missionId(mission.getId())
                 .build();
     }
 }

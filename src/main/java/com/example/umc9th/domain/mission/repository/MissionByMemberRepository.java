@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public interface MissionByMemberRepository extends JpaRepository<MissionByMember
     Slice<MissionByMember> findMyMissionsWithCompoundCursor(
             @Param("memberId") Long memberId,
             @Param("status") MissionStatus status,
-            @Param("cursorDeadline") LocalDateTime cursorDeadline,
+            @Param("cursorDeadline") LocalDate cursorDeadline,
             @Param("cursorId") Long cursorId,
             Pageable pageable
     );
