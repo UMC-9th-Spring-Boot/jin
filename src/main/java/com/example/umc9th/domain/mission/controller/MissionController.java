@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
@@ -24,7 +25,7 @@ public class MissionController {
     @Operation(summary = "나의 미션 목록 조회 API", description = "진행중 또는 완료된 미션 목록을 커서 기반으로 조회합니다.")
     public ApiResponse<MissionResponse.MyMissionListDTO> getMyMissions(
             @RequestParam MissionStatus status,
-            @RequestParam(required = false) LocalDateTime cursorDeadline,
+            @RequestParam(required = false) LocalDate cursorDeadline,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue = "10") int size
     ) {

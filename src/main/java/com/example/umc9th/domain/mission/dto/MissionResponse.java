@@ -22,7 +22,7 @@ public class MissionResponse {
         private String missionContent;
         private Integer rewardPoint;
         private Integer targetAmount;
-        private LocalDateTime deadline;
+        private LocalDate deadline;
     }
 
     @Getter
@@ -33,7 +33,15 @@ public class MissionResponse {
 
         private List<MyMissionDTO> missionList;
         private Boolean hasNext;
-        private LocalDateTime nextCursorDeadline;
+        private LocalDate nextCursorDeadline;
         private Long nextCursorId;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @Schema(description = "미션 추가 응답")
+    public static class MissionAddResultDTO {
+        private Long missionId;
     }
 }
