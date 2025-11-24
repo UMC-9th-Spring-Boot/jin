@@ -7,6 +7,8 @@ import com.example.umc9th.domain.mission.entity.MissionByMember;
 import com.example.umc9th.domain.mission.entity.enums.MissionStatus;
 import com.example.umc9th.domain.mission.repository.MissionByMemberRepository;
 import com.example.umc9th.domain.mission.repository.MissionRepository;
+import com.example.umc9th.global.apiPayload.code.status.ErrorStatus;
+import com.example.umc9th.global.apiPayload.exception.handler.ErrorHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -73,5 +75,27 @@ public class MissionServiceImpl implements MissionService {
                 .nextCursorDeadline(nextCursorDeadline)
                 .nextCursorId(nextCursorId)
                 .build();
+    }
+
+    // 미션 진행 완료 처리
+    @Transactional
+    @Override
+    public MissionResponse.MissionDTO completeMission(Long mbmId) {
+
+        // 1. MissionByMember 엔티티 조회
+        MissionByMember mbm = missionByMemberRepository.findById(mbmId)
+                .orElseThrow(() -> new ErrorHandler(ErrorStatus.MISSION_BY_MEMBER_NOT_FOUND)); // 미션-멤버 관계 없음
+
+        // 2. 현재 상태 확인 (IN_PROGRESS인지 확인)
+        if (mbm.getStatus() != MissionStatus.IN_PROGRESS) {
+            throw new ErrorHandler(ErrorStatus.MISSION_STATUS_NOT_IN_PROGRESS); // 진행 중인 미션이 아님
+        }
+
+        // 3. 상태 변경 (COMPLETE)
+        // MissionByMember 엔티티에 updateStatus(MissionStatus status) 메서드가 존재한다고 가정
+        mbm.updateStatus(MissionStatus.SUCCESS);
+
+        // 4. 응답 DTO 변환 및 반환
+        return MissionConverter.toMyMissionDTO(mbm);
     }
 }

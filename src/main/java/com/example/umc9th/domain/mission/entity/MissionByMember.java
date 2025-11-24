@@ -34,4 +34,9 @@ public class MissionByMember extends BaseEntity {
     @ColumnDefault("false")
     private Boolean isReviewed = false;
 
+
+    // 미션 상태 변경 메소드
+    public void updateStatus(MissionStatus status) {
+        this.status = status;
+    }
 }

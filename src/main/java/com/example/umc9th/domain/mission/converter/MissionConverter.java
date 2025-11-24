@@ -21,6 +21,7 @@ public class MissionConverter {
                 .targetAmount(mission.getTargetAmount())
                 .rewardPoint(mission.getRewardPoint())
                 .deadline(mission.getDeadline())
+                .missionStatus(missionByMember.getStatus())
                 .build();
     }
 

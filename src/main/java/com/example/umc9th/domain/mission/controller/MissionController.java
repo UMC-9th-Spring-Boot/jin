@@ -5,11 +5,10 @@ import com.example.umc9th.domain.mission.entity.enums.MissionStatus;
 import com.example.umc9th.domain.mission.service.MissionService;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -32,4 +31,15 @@ public class MissionController {
         return ApiResponse.onSuccess(response);
     }
 
+    @PatchMapping("/{mbmId}/complete")
+    @Operation(summary = "미션 진행 완료 상태 변경 API", description = "진행 중인 미션의 상태를 완료(COMPLETE)로 변경하고 변경 결과를 반환합니다.")
+    @Parameters({
+            @Parameter(name = "mbmId", description = "변경할 MissionByMember의 ID")
+    })
+    public ApiResponse<MissionResponse.MissionDTO> completeMission(
+            @PathVariable(name = "mbmId") Long mbmId
+    ) {
+        MissionResponse.MissionDTO response = missionService.completeMission(mbmId);
+        return ApiResponse.onSuccess(response);
+    }
 }

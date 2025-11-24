@@ -1,5 +1,6 @@
 package com.example.umc9th.domain.mission.dto;
 
+import com.example.umc9th.domain.mission.entity.enums.MissionStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,7 @@ public class MissionResponse {
         private Integer rewardPoint;
         private Integer targetAmount;
         private LocalDate deadline;
+        private MissionStatus missionStatus;
     }
 
     @Getter
