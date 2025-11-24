@@ -2,6 +2,8 @@ package com.example.umc9th.domain.review.repository;
 
 import com.example.umc9th.domain.member.entity.Member;
 import com.example.umc9th.domain.review.entity.Review;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -28,4 +30,21 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
                       @Param("storeId") Long storeId,
                       @Param("content") String content,
                       @Param("rate") Float rate);
+
+
+    /**
+     * 가게별 리뷰 목록 조회 (커서 기반 페이징)
+     * - storeId: 해당 가게의 리뷰만 조회
+     * - cursorId: 마지막으로 조회한 리뷰 ID (첫 페이지는 NULL)
+     * - Pageable: 페이징 사이즈(LIMIT) 처리
+     */
+    @Query("SELECT r FROM Review r " +
+            "WHERE r.store.id = :storeId " +
+            "  AND (:cursorId IS NULL OR r.id < :cursorId) " +
+            "ORDER BY r.id DESC")
+    Slice<Review> findReviewsByStore(
+            @Param("storeId") Long storeId,
+            @Param("cursorId") Long cursorId,
+            Pageable pageable
+    );
 }

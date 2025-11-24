@@ -4,11 +4,16 @@ import com.example.umc9th.domain.mission.converter.MissionConverter;
 import com.example.umc9th.domain.mission.dto.MissionRequest;
 import com.example.umc9th.domain.mission.dto.MissionResponse;
 import com.example.umc9th.domain.mission.entity.Mission;
+import com.example.umc9th.domain.review.dto.ReviewResponse;
+import com.example.umc9th.domain.review.entity.Review;
+import com.example.umc9th.domain.review.service.ReviewService;
 import com.example.umc9th.domain.store.dto.StoreResponse;
 import com.example.umc9th.domain.store.entity.enums.StoreSortType;
 import com.example.umc9th.domain.store.service.StoreService;
 import com.example.umc9th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class StoreController {
 
     private final StoreService storeService;
+    private final ReviewService reviewService;
 
     @Operation(
             summary = "커서 기반 가게 검색",
@@ -53,6 +59,20 @@ public class StoreController {
         // 4. MissionConverter로 응답 DTO 변환
         MissionResponse.MissionAddResultDTO response = MissionConverter.toMissionAddResultDTO(newMission);
 
+        return ApiResponse.onSuccess(response);
+    }
+
+    @GetMapping("/{storeId}/reviews")
+    @Operation(summary = "가게 리뷰 목록 조회 API", description = "특정 가게의 리뷰 목록을 커서 기반으로 조회합니다.")
+    @Parameters({
+            @Parameter(name = "storeId", description = "가게 ID"),
+            @Parameter(name = "cursorId", description = "마지막 리뷰 ID (첫 요청 시 비워두세요)")
+    })
+    public ApiResponse<ReviewResponse.ReviewListDTO> getReviewList(
+            @PathVariable(name = "storeId") Long storeId,
+            @RequestParam(name = "cursorId", required = false) Long cursorId
+    ) {
+        ReviewResponse.ReviewListDTO response = reviewService.getReviewList(storeId, cursorId);
         return ApiResponse.onSuccess(response);
     }
 }
