@@ -28,4 +28,21 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
             @Param("memberId") Long memberId,
             @Param("cursorId") Long cursorId,
             Pageable pageable);
+
+    /**
+     * 특정 가게의 미션 목록을 커서 기반으로 조회 (미션 ID 기준 내림차순)
+     * @param storeId   조회할 가게의 ID
+     * @param cursorId  마지막으로 조회된 미션의 ID (첫 페이지는 null)
+     * @param pageable  LIMIT 절과 페이징 처리를 위한 정보
+     * @return Slice<Mission>
+     */
+    @Query("SELECT m FROM Mission m " +
+            "WHERE m.store.id = :storeId " +
+            "  AND (:cursorId IS NULL OR m.id < :cursorId) " + // 커서 조건
+            "ORDER BY m.id DESC")
+    Slice<Mission> findMissionsByStore(
+            @Param("storeId") Long storeId,
+            @Param("cursorId") Long cursorId,
+            Pageable pageable);
+
 }

@@ -4,6 +4,7 @@ import com.example.umc9th.domain.mission.converter.MissionConverter;
 import com.example.umc9th.domain.mission.dto.MissionRequest;
 import com.example.umc9th.domain.mission.dto.MissionResponse;
 import com.example.umc9th.domain.mission.entity.Mission;
+import com.example.umc9th.domain.mission.service.MissionService;
 import com.example.umc9th.domain.review.dto.ReviewResponse;
 import com.example.umc9th.domain.review.entity.Review;
 import com.example.umc9th.domain.review.service.ReviewService;
@@ -25,6 +26,7 @@ public class StoreController {
 
     private final StoreService storeService;
     private final ReviewService reviewService;
+    private final MissionService missionService;
 
     @Operation(
             summary = "커서 기반 가게 검색",
@@ -73,6 +75,20 @@ public class StoreController {
             @RequestParam(name = "cursorId", required = false) Long cursorId
     ) {
         ReviewResponse.ReviewListDTO response = reviewService.getReviewList(storeId, cursorId);
+        return ApiResponse.onSuccess(response);
+    }
+
+    @GetMapping("/{storeId}/missions")
+    @Operation(summary = "가게 미션 목록 조회 API", description = "특정 가게의 미션 목록을 커서 기반으로 조회합니다.")
+    @Parameters({
+            @Parameter(name = "storeId", description = "가게 ID"),
+            @Parameter(name = "cursorId", description = "마지막 미션 ID (첫 요청 시 비워두세요)", required = false)
+    })
+    public ApiResponse<MissionResponse.MissionListDTO> getMissionListByStore(
+            @PathVariable(name = "storeId") Long storeId,
+            @RequestParam(name = "cursorId", required = false) Long cursorId
+    ) {
+        MissionResponse.MissionListDTO response = missionService.getMissionListByStore(storeId, cursorId);
         return ApiResponse.onSuccess(response);
     }
 }

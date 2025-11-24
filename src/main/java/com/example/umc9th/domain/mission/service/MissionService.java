@@ -4,11 +4,12 @@ import com.example.umc9th.domain.mission.dto.MissionResponse;
 import com.example.umc9th.domain.mission.entity.enums.MissionStatus;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public interface MissionService {
 
     // 나의 미션 목록 조회
-    MissionResponse.MyMissionListDTO getMyMissions(Long memberId, MissionStatus status, LocalDate cursorDeadline, Long cursorId, int size);
+    MissionResponse.MissionListDTO getMyMissions(Long memberId, MissionStatus status, LocalDate cursorDeadline, Long cursorId, int size);
 
+    // 가게 미션 목록 조회
+    MissionResponse.MissionListDTO getMissionListByStore(Long storeId, Long cursorId);
 }
