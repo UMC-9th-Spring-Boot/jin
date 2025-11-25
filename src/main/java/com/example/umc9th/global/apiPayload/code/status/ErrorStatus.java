@@ -20,8 +20,11 @@ public enum ErrorStatus implements BaseErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MEMBER4041", "존재하지 않는 회원입니다."),
 
     // 가게 관련 에러
-    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE4041", "존재하지 않는 가게 입니다.");
+    STORE_NOT_FOUND(HttpStatus.NOT_FOUND, "STORE4041", "존재하지 않는 가게 입니다."),
 
+    // 미션 관련 에러
+    MISSION_BY_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"MISSION4041", "존재하지 않는 유저 미션 입니다."),
+    MISSION_STATUS_NOT_IN_PROGRESS(HttpStatus.CONFLICT, "MISSION4091","해당 미션은 현재 진행 중(IN_PROGRESS) 상태가 아니므로 완료할 수 없습니다.");
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;

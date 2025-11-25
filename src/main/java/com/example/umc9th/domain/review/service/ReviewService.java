@@ -15,4 +15,6 @@ public interface ReviewService {
             Integer rate,
             Long cursorId
     );
+
+    ReviewResponse.ReviewListDTO getReviewList(Long storeId, Long cursorId);
 }

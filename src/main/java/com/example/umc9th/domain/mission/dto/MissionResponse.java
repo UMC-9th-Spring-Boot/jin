@@ -1,13 +1,12 @@
 package com.example.umc9th.domain.mission.dto;
 
+import com.example.umc9th.domain.mission.entity.enums.MissionStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class MissionResponse {
@@ -15,23 +14,24 @@ public class MissionResponse {
     @Getter
     @Builder
     @AllArgsConstructor
-    @Schema(description = "나의 미션 목록의 개별 미션 응답")
-    public static class MyMissionDTO {
+    @Schema(description = "미션 목록의 개별 미션 응답")
+    public static class MissionDTO {
 
         private String storeName;
         private String missionContent;
         private Integer rewardPoint;
         private Integer targetAmount;
         private LocalDate deadline;
+        private MissionStatus missionStatus;
     }
 
     @Getter
     @Builder
     @AllArgsConstructor
-    @Schema(description = "나의 미션 목록 조회 응답")
-    public static class MyMissionListDTO {
+    @Schema(description = "미션 목록 조회 응답")
+    public static class MissionListDTO {
 
-        private List<MyMissionDTO> missionList;
+        private List<MissionDTO> missionList;
         private Boolean hasNext;
         private LocalDate nextCursorDeadline;
         private Long nextCursorId;

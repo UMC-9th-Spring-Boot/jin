@@ -8,27 +8,27 @@ import com.example.umc9th.domain.store.entity.Store;
 import org.springframework.data.domain.Slice;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MissionConverter {
 
-    public static MissionResponse.MyMissionDTO toMyMissionDTO(MissionByMember missionByMember) {
+    public static MissionResponse.MissionDTO toMyMissionDTO(MissionByMember missionByMember) {
         Mission mission = missionByMember.getMission();
-        return MissionResponse.MyMissionDTO.builder()
+        return MissionResponse.MissionDTO.builder()
                 .storeName(mission.getStore().getName())
                 .missionContent(mission.getContent())
                 .targetAmount(mission.getTargetAmount())
                 .rewardPoint(mission.getRewardPoint())
                 .deadline(mission.getDeadline())
+                .missionStatus(missionByMember.getStatus())
                 .build();
     }
 
-    public static MissionResponse.MyMissionListDTO toMyMissionListDTO(Slice<MissionByMember> missionByMemberSlice) {
+    public static MissionResponse.MissionListDTO toMyMissionListDTO(Slice<MissionByMember> missionByMemberSlice) {
 
         // 각 MissionByMember 엔터티 -> MyMissionDTO로 변환 -> list로
-        List<MissionResponse.MyMissionDTO> missionDTOList = missionByMemberSlice.getContent().stream()
+        List<MissionResponse.MissionDTO> missionDTOList = missionByMemberSlice.getContent().stream()
                 .map(MissionConverter::toMyMissionDTO)
                 .collect(Collectors.toList());
 
@@ -46,7 +46,7 @@ public class MissionConverter {
             nextCursorId = lastMission.getId();
         }
 
-        return MissionResponse.MyMissionListDTO.builder()
+        return MissionResponse.MissionListDTO.builder()
                 .missionList(missionDTOList)
                 .hasNext(missionByMemberSlice.hasNext())
                 .nextCursorDeadline(nextCursorDeadline)
@@ -69,6 +69,17 @@ public class MissionConverter {
     public static MissionResponse.MissionAddResultDTO toMissionAddResultDTO(Mission mission) {
         return MissionResponse.MissionAddResultDTO.builder()
                 .missionId(mission.getId())
+                .build();
+    }
+
+    // Mission Entity -> MissionDTO 변환
+    public static MissionResponse.MissionDTO toMissionDTO(Mission mission) {
+        return MissionResponse.MissionDTO.builder()
+                .storeName(mission.getStore().getName())
+                .missionContent(mission.getContent())
+                .targetAmount(mission.getTargetAmount())
+                .rewardPoint(mission.getRewardPoint())
+                .deadline(mission.getDeadline())
                 .build();
     }
 }

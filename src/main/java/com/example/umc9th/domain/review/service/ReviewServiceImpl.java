@@ -14,6 +14,8 @@ import com.example.umc9th.global.apiPayload.code.status.ErrorStatus;
 import com.example.umc9th.global.apiPayload.exception.handler.ErrorHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,8 @@ public class ReviewServiceImpl implements ReviewService {
     private final StoreRepository storeRepository;
     private final ReviewRepository reviewRepository;
     private final ReviewRepositoryCustom reviewRepositoryCustom;
+
+    private static final int PAGE_SIZE = 10;
 
     // 리뷰 작성
     @Transactional
@@ -89,5 +93,35 @@ public class ReviewServiceImpl implements ReviewService {
                 .build();
     }
 
+    // 가게별 리뷰 조회
+    public ReviewResponse.ReviewListDTO getReviewList(Long storeId, Long cursorId) {
+
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE);
+
+        Slice<Review> reviewSlice = reviewRepository.findReviewsByStore(storeId, cursorId, pageable);
+
+        // 리뷰 ID 리스트 추출
+        List<Long> reviewIds = reviewSlice.getContent().stream()
+                .map(Review::getId)
+                .toList();
+
+        // 리뷰별 이미지 Map 조회 (N+1 문제 방지를 위해 별도의 Batch 조회)
+        Map<Long, List<String>> reviewImageMap = reviewRepositoryCustom.findReviewImages(reviewIds);
+
+        List<ReviewResponse.ReviewResultDTO> dtoList =
+                ReviewConverter.toReviewResultDTOList(reviewSlice.getContent(), reviewImageMap);
+
+        Long nextCursorId = null;
+        if (reviewSlice.hasNext() && !dtoList.isEmpty()) {
+            // 다음 페이지가 존재하고 DTO 리스트가 비어있지 않은 경우
+            nextCursorId = dtoList.get(dtoList.size() - 1).getReviewId();
+        }
+
+        return ReviewResponse.ReviewListDTO.builder()
+                .reviewList(dtoList)
+                .hasNext(reviewSlice.hasNext())
+                .nextCursorId(nextCursorId)
+                .build();
+    }
 
 }
